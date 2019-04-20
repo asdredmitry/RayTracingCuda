@@ -5,6 +5,8 @@
 #include <iostream>
 #include <stdlib.h>
 #include <vector>
+#include <string>
+#include <sstream>
 
 class vec3{
     public:
@@ -164,6 +166,27 @@ class vec3{
         data[1] /= len;
         data[2] /= len;
     }
+    inline std::string toString() const
+    {
+        std::stringstream ss;
+        ss << int(data[0]);
+        ss << " ";
+        ss << int(data[1]);
+        ss << " ";
+        ss << int(data[2]);
+        return ss.str();
+    }
+    inline std::string toString_() const 
+    {
+         std::stringstream ss;
+        ss << float(data[0]);
+        ss << " ";
+        ss << float(data[1]);
+        ss << " ";
+        ss << float(data[2]);
+        return ss.str();
+    }
+
 };
 std::istream& operator>>(std::istream &is, vec3 &t);
 std::ostream& operator<<(std::ostream &os, vec3 &t);
