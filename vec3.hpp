@@ -76,6 +76,10 @@ class vec3{
     {
         return *this;
     }
+    inline vec3 operator*(const vec3& tmp) const
+    {
+        return vec3(data[0]*tmp.data[0], data[1]*tmp.data[1], data[2]*tmp.data[2]);
+    }
     inline vec3 operator-() const
     {
         return vec3(-data[0], -data[1], -data[2]);
@@ -218,4 +222,6 @@ class vec3Int
 std::istream& operator>>(std::istream &is, vec3Int &t);
 std::ostream& operator<<(std::ostream &os, vec3Int &t);
 
+float dot(const vec3& v1, const vec3& v2);
+vec3 reflect(const vec3& v, const vec3& n);
 #endif

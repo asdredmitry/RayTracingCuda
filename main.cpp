@@ -6,6 +6,7 @@
 #include "hitable.hpp"
 #include "sphere.hpp"
 #include "hitablelist.hpp"
+#include "materials.hpp"
 #include "camera.hpp"
 using namespace std;
 void write_header(ofstream & out, int nx, int ny)
@@ -14,37 +15,48 @@ void write_header(ofstream & out, int nx, int ny)
     out << nx << " " << ny << endl;
     out << 255 << endl;
 }
-vec3 color(const ray& r, hitable * world)
+vec3 color(const ray& r, hitable * world, int depth)
 {
     hit_record rec;
-    if(world->hit(r, 0.0f, MAXFLOAT, rec))
+    if(world->hit(r, 0.001f, MAXFLOAT, rec))
     {
-        //return vec3(1.0f, 0.0f, 0.0f);
-        return vec3(rec.normal.x() + 1, rec.normal.y() + 1, rec.normal.z() + 1)*0.5f;
+        vec3 attenuation;
+        ray scattered;
+        if(depth < 50 && rec.mat_ptr->scatter(r, rec, attenuation, scattered))
+        {
+            return attenuation*color(scattered, world, depth + 1);
+        }
+        else 
+        {
+            return vec3(0.0f, 0.0f, 0.0f);
+        }
     }
     else
     {
         vec3 unit_direction = unit_vector(r.direction());
         float t1 = 0.5*(unit_direction.y() + 1.0);
+        //return vec3(0.0f, 1.0f, 0.0f);
         return vec3(1.0f, 1.0f, 1.0f)*(1.0 - t1) + vec3(0.5f, 0.7f, 1.0f)*t1;   
     }
 }
 int main()
 {
     ofstream output("Picture.ppm");
-    int nx = 1920;
-    int ny = 1080;
+    int nx = 10000;
+    int ny = 5000;
     int ns = 15;
     write_header(output, nx, ny);
     vec3 lower_left_corner(-2.0f, -1.0f, -1.0f);
     vec3 horizontal(4.0f, 0.0f, 0.0f);
     vec3 vertical(0.0f, 2.0f, 0.0f);
     vec3 origin(0.0f, 0.0f, 0.0f);
-    hitable *list[2];
-    list[0] = new sphere(vec3(0, 0, -1), 0.5);
-    list[1] = new sphere(vec3(0.0f, -100.5f, -1.0f), 100.f);
-    //list[2] = new sphere(vec3(-2.0f, 1.5f, -3.0f), 1.f);
-    hitable *world = new hitable_list(list, 2);
+    hitable *list[5];
+    list[0] = new sphere(vec3(0, 0, -1), 0.5, new lambertian(vec3(0.8f, 0.3f, 0.3f)));
+    list[1] = new sphere(vec3(0.0f, -100.5f, -1.0f), 100.f, new lambertian(vec3(0.8f, 0.8f, 0.0f)));
+    list[2] = new sphere(vec3(1.0f, 0.0f, -1.0f), 0.5f, new metal(vec3(0.5f, 0.5f, 0.5f)));
+    list[3] = new sphere(vec3(-1.0f, 0.0f, -1.0f), 0.5f, new metal(vec3(0.8f, 0.8f, 0.8f)));
+    list[4] = new sphere(vec3(0.0f, 2.0f, -2.0f), 0.5f, new metal(vec3(0.6f, 0.6f, 0.6f)));
+    hitable *world = new hitable_list(list, 5);
     camera cam;
     for(int i = ny - 1; i >= 0; i--)
     {
@@ -56,7 +68,7 @@ int main()
                 float u = float(j + drand48())/float(nx);
                 float v = float(i + drand48())/float(ny);
                 ray r = cam.get_ray(u, v);
-                col += color(r, world);
+                col += color(r, world, 0);
             }
             col /= float(ns);
             col *= float(255.99);

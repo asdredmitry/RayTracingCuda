@@ -27,3 +27,11 @@ vec3 unit_vector(vec3 v)
     }
     return v /= v.length();
 }
+float dot(const vec3& v1, const vec3& v2)
+{
+    return v1[0]*v2[0] + v1[1]*v2[1] + v1[2]*v2[2];
+}
+vec3 reflect(const vec3& v, const vec3& n)
+{
+    return v - n*2*dot(v, n);
+}
