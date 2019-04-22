@@ -44,19 +44,20 @@ int main()
     ofstream output("Picture.ppm");
     int nx = 2000;
     int ny = 1000;
-    int ns = 50;
+    int ns = 10;
     write_header(output, nx, ny);
     vec3 lower_left_corner(-2.0f, -1.0f, -1.0f);
     vec3 horizontal(4.0f, 0.0f, 0.0f);
     vec3 vertical(0.0f, 2.0f, 0.0f);
     vec3 origin(0.0f, 0.0f, 0.0f);
-    hitable *list[5];
+    hitable *list[6];
     list[0] = new sphere(vec3(0, 0, -1), 0.5, new lambertian(vec3(0.8f, 0.3f, 0.3f)));
-    list[1] = new sphere(vec3(0.0f, -100.5f, -1.0f), 100.f, new metal(vec3(0.8f, 0.8f, 0.8f), 0.1f));
+    list[1] = new sphere(vec3(0.0f, -100.5f, -1.0f), 100.f, new lambertian(vec3(0.1f, 0.9f, 0.1f)));
     list[2] = new sphere(vec3(1.0f, 0.0f, -1.0f), 0.5f, new metal(vec3(0.5f, 0.5f, 0.5f),0.3f));
-    list[3] = new sphere(vec3(-1.0f, 0.0f, -1.0f), 0.5f, new metal(vec3(0.8f, 0.8f, 0.8f), 0.f));
-    list[4] = new sphere(vec3(0.0f, 2.0f, -2.0f), 0.5f, new metal(vec3(0.6f, 0.6f, 0.6f), 0.f));
-    hitable *world = new hitable_list(list, 5);
+    list[3] = new sphere(vec3(-1.0f, 0.0f, -1.0f), -0.48f, new dielectric(1.5f));
+    list[4] = new sphere(vec3(-1.0f, 0.0f, -1.0f), 0.5f, new dielectric(1.5f));
+    list[5] = new sphere(vec3(-3.0f, 0.6f, -4.0f), 1.0f, new lambertian(vec3(0.6f, 0.6f, 0.0f)));
+    hitable *world = new hitable_list(list, 6);
     camera cam;
     for(int i = ny - 1; i >= 0; i--)
     {
