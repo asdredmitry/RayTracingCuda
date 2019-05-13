@@ -1,28 +1,13 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Focus Beamer Presentation
-% LaTeX Template
-% Version 1.0 (8/8/18)
-%
-% This template has been downloaded from:
-% http://www.LaTeXTemplates.com
-%
-% Original author:
-% Pasquale Africa (https://github.com/elauksap/focus-beamertheme) with modifications by 
-% Vel (vel@LaTeXTemplates.com)
-%
-% Template license:
-% GNU GPL v3.0 License
-%
-% Important note:
-% The bibliography/references need to be compiled with bibtex.
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%----------------------------------------------------------------------------------------
-%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
-%----------------------------------------------------------------------------------------
 
 \documentclass{beamer}
+\usepackage[10pt]{extsizes} 
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+%\usepackage{pscyr}
+\usepackage{hyperref}
+\usepackage{setspace}
+\usepackage{amsmath,amssymb,amsfonts,amsthm,secdot}
 
 \usetheme{focus} % Use the Focus theme supplied with the template
 % Add option [numbering=none] to disable the footer progress bar
@@ -40,17 +25,15 @@
 %	 TITLE SLIDE
 %----------------------------------------------------------------------------------------
 
-\title{Focus: \\ A Minimalist Beamer Theme}
+\title{Тема: \\ Методы трассировки лучей }
 
-\subtitle{Subtitle}
+\subtitle{Методы Монте-Карло}
 
-\author{Author 1 \\ Author 2}
+\author{Михайлин Д.А.}
 
-\titlegraphic{\includegraphics[scale=1.25]{Images/focuslogo.pdf}} % Optional title page image, comment this line to remove it
 
-\institute{Institute Name \\ Institute Address}
 
-\date{dd mm yyyy}
+\date{02.05.2019}
 
 %------------------------------------------------
 
@@ -59,21 +42,64 @@
 %------------------------------------------------
 
 \begin{frame}
-	\maketitle % Automatically created using the information in the commands above
+	\maketitle 
 \end{frame}
 
 %----------------------------------------------------------------------------------------
 %	 SECTION 1
 %----------------------------------------------------------------------------------------
 
-\section{Section 1} % Section title slide, unnumbered
+\section{Основные понятия.} % Section title slide, unnumbered
 
 %------------------------------------------------
 
-\begin{frame}{Simple Slide}
-	This is a simple slide.
+\begin{frame}{Поток}
+	\begin{columns}
+		\column{0.5\textwidth}
+			Поток излучения обозначается - $\Phi$(Flux). 
+		
+		\column{0.5\textwidth}
+			\includegraphics[width=\linewidth]{Flux.png}
+	\end{columns}
 \end{frame}
 
+\begin{frame}{Интенсивность излучения}
+	\begin{columns}
+		\column{0.5\textwidth}
+			Интенсивность излучения обозначается - E(Irradiance). $E = \frac{d\Phi(x)}{dS(x)}$
+		
+		\column{0.5\textwidth}
+			\includegraphics[width=\linewidth]{Irradiance.png}
+	\end{columns}
+\end{frame}
+\begin{frame}{Cветимость}
+	\begin{columns}
+		\column{0.5\textwidth}
+			Светимость обозначается - L(Radiance).\\ $L(x, \omega) = \frac{d^2\Phi(x)}{d\omega(x)dA^{\perp}(x)}$ \\ Можно переписать это уравнение в виде: \\$L(x, \omega) = \frac{d^2\Phi(x)}{d\omega(x)dA(x)(\omega, n)} = \frac{d^2\Phi(x)}{d\omega^{\perp}(x)dA(x)}$ 
+		
+		\column{0.5\textwidth}
+			\includegraphics[width=\linewidth]{Radiance.png}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{Cвязь между этими величинами:}
+	$L(x, \omega) = \frac{d^2\Phi(x)}{d\omega(x)dA^{\perp}(x)}$;\\ $L(x, \omega)d\omega(x)dA^{\perp}(x) = d^2\Phi(x)$;\\ $\Phi(x) = \int_A \int_{\Omega} L(x, \omega)d\omega(x)dA^{\perp}(x)$ = $\int_A \int_{\Omega} L(x, \omega)(\omega, n)d\omega(x)dA(x)$ \\ Получили выражение для потока через светимость. \\ 
+	Также можем выразить интенсивность излучения через светимость. \\
+	$E(x) = \int_{\Omega}L(x,\omega)(\omega, n)d\omega = \int_{\Omega}L(x, \omega)d\omega^{\perp}$
+	
+\end{frame}
+
+\begin{frame}{BRDF}
+	Bidirectional reflectance distribution function. Эта функция описывает насколько "ярко" выглядит поверхность с направления $\omega$.\\
+	$f_r(x, \omega_1\rightarrow\omega) = \frac{dL(x\rightarrow\omega)}{dE(x\leftarrow\omega_1)} = \frac{dL(x\rightarrow\omega)}{L(x\leftarrow\omega_1)(n,\omega_1)d\omega_1}$
+	
+\end{frame}
+
+\begin{frame}{Основное уравнение рендеринга.}
+	Bidirectional reflectance distribution function. Эта функция описывает насколько "ярко" выглядит поверхность с направления $\omega$.\\
+	$f_r(x, \omega_1\rightarrow\omega) = \frac{dL(x\rightarrow\omega)}{dE(x\leftarrow\omega_1)} = \frac{dL(x\rightarrow\omega)}{L(x\leftarrow\omega_1)(n,\omega_1)d\omega_1}$
+	
+\end{frame}
 %------------------------------------------------
 
 \begin{frame}[plain]{Plain Slide}
